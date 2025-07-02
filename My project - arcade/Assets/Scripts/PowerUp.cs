@@ -18,7 +18,8 @@ public class PowerUp : MonoBehaviour
 
     private void OnMouseDown() 
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Powerups);
         gameManager.PowerUpAquired();
     }
 }

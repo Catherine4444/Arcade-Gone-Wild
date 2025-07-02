@@ -912,6 +912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1226908437}
   - component: {fileID: 1226908436}
+  - component: {fileID: 1226908438}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -935,9 +936,11 @@ MonoBehaviour:
   - {fileID: 526687232855252760, guid: 5786784e83e3d4ca482e7bcb73cbc961, type: 3}
   humans:
   - {fileID: 243352640255129519, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
+  powerups:
+  - {fileID: 5151513751271871756, guid: 6877ebf5a764b4d3a960d3f40049c925, type: 3}
+  hasPowerUp: 0
   gameNotOver: 1
   numberOfHumansAlive: 1
-  hasPowerUp: 0
 --- !u!4 &1226908437
 Transform:
   m_ObjectHideFlags: 0
@@ -953,6 +956,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1226908438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226908435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f189ba9ed958f4acc91365e73b58b8ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _addToDontDestroyOnLoad: 0
 --- !u!1 &1343445140
 GameObject:
   m_ObjectHideFlags: 0
@@ -1668,6 +1684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy 1
       objectReference: {fileID: 0}
+    - target: {fileID: 526687232855252760, guid: 5786784e83e3d4ca482e7bcb73cbc961, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1925896036884155359, guid: 5786784e83e3d4ca482e7bcb73cbc961, type: 3}
       propertyPath: m_Constraints
       value: 0
@@ -1769,6 +1789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PowerUp 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5151513751271871756, guid: 6877ebf5a764b4d3a960d3f40049c925, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1785,6 +1809,10 @@ PrefabInstance:
     - target: {fileID: 243352640255129519, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
       propertyPath: m_Name
       value: Human 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 243352640255129519, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2853287689315500835, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
       propertyPath: m_LocalPosition.x

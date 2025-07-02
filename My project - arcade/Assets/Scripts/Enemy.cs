@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
 
     private void OnMouseDown() 
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 }
