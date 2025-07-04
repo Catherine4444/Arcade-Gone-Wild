@@ -72,9 +72,6 @@ public class Human : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(0f, 10f));
             
         }
-        
-        
-
     }
 
     void SearchForDest()
