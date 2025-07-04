@@ -6,14 +6,15 @@ TagManager:
   tags:
   - Human
   - Enemy
+  - Power Up
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Navmesh
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 

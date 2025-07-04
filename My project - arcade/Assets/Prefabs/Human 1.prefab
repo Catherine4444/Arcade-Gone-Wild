@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4225081514124040890}
   - component: {fileID: 1830420770161692683}
   - component: {fileID: -3980160764091758927}
+  - component: {fileID: 2779964090756566702}
   m_Layer: 0
   m_Name: Human 1
   m_TagString: Human
@@ -149,4 +150,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b4a1ad86cda4c5d97de5d8fa1215d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 150
+  speed: 1.5
+  range: 20
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!195 &2779964090756566702
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243352640255129519}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
