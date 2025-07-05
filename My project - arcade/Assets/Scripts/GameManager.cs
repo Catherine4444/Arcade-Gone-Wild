@@ -86,25 +86,27 @@ public class GameManager : MonoBehaviour
         double enemiesToSpawn;
         //double powerupsToSpawn;
         yield return new WaitForSeconds(5);
-
-        while (gameNotOver && (wave < itemsToSpawn.Length))
+        int totalWaves = itemsToSpawn.GetLength(0);
+        Debug.Log($"number of waves {totalWaves}");
+        while (gameNotOver && (wave < totalWaves))
         {
-            
+            Debug.Log($"start of wave {wave}");
             SpawnPowerUp(itemsToSpawn[wave, 1]);
             yield return new WaitForSeconds(powerUpSpawnRate);
 
-            if (wave < itemsToSpawn.Length - 1)
+            if (wave < (totalWaves - 2))
             {
                 enemiesToSpawn = UnityEngine.Random.Range(1, itemsToSpawn[wave, 0]+1);
             }
             else
             {
+                Debug.Log("last wave");
                 enemiesToSpawn = itemsToSpawn[wave, 0];
             }
 
             enemiesActive = enemiesToSpawn;
             SpawnEnemies(enemiesToSpawn);
-
+            Debug.Log($"start of wave {wave}. Enemies to Spawn: {enemiesToSpawn}. enemies active: {enemiesActive}");
             // Wait until all enemies are destroyed
             yield return new WaitUntil(() => enemiesActive == 0);
             yield return new WaitForSeconds(enemySpawnRate);
@@ -125,7 +127,6 @@ public class GameManager : MonoBehaviour
 
     void SpawnEnemies(double enemiesToSpawn)
     {
-        //Debug.Log($"start of wave {wave}. Enemies to Spawn: {enemiesToSpawn}. enemies active: {enemiesActive}");
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             //Debug.Log($"enemy spawn loop {i}");

@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        speed = 5;
+        speed = 22;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         enemyRb = GetComponent<Rigidbody>();
         humans = GameObject.FindGameObjectsWithTag("Human");

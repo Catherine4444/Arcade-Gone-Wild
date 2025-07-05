@@ -8,7 +8,7 @@ public class ShieldReflectionPowerup : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        reflectForce = 1000f;
+        reflectForce = 3900f;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
@@ -24,16 +24,16 @@ public class ShieldReflectionPowerup : MonoBehaviour
         if( other.gameObject.CompareTag("Enemy") && gameManager.hasPowerUp)
         {
             Rigidbody enemyRb = other.gameObject.GetComponent<Rigidbody>();
-
-
             if (enemyRb != null )
             {
-                Debug.Log("Collided with "+other.gameObject.name+" with power up set to " + gameManager.hasPowerUp);
-                Vector3 awayFromShield = (other.gameObject.transform.position - transform.position);
-                enemyRb.AddForce(awayFromShield * reflectForce, ForceMode.Impulse);
+                //Debug.Log("Collided with "+other.gameObject.name+" with power up set to " + gameManager.hasPowerUp);
+                Vector3 awayFromShield = (other.gameObject.transform.position - transform.position).normalized;
+                awayFromShield = new Vector3(awayFromShield.x * reflectForce, 0f, awayFromShield.z * reflectForce);
+                enemyRb.AddForce(awayFromShield, ForceMode.Impulse);
             }
 
             gameManager.hasPowerUp = false;
+            Debug.Log("Power up used");
         }
         
     }

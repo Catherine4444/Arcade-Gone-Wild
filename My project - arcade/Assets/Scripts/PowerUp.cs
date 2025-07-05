@@ -33,6 +33,7 @@ public class PowerUp : MonoBehaviour
     {   
         yield return new WaitForSeconds(10);
         ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Powerups);
+        Debug.Log("powerup expired");
     }
 
 
