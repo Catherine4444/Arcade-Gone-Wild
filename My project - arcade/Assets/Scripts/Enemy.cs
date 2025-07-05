@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     private Rigidbody enemyRb;
     
-    private float poweupStrength = 30;
+    private float poweupStrength = 3;
     GameManager gameManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,29 +44,13 @@ public class Enemy : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Human"))
         {
-            if( gameManager.hasPowerUp)
+            ObjectPoolManager.ReturnObjectToPool(other.gameObject, ObjectPoolManager.PoolType.Humans);
+            ObjectPoolManager.ReturnObjectToPool(gameObject);
+            gameManager.numberOfHumansAlive--;
+            if(gameManager.numberOfHumansAlive == 0)
             {
-                Vector3 awayFromHuman = ( transform.position - other.gameObject.transform.position );
-
-                Rigidbody HumanRb = other.GetComponent<Rigidbody>();
-                HumanRb.isKinematic = true; // So it's not affected by physics
-                //Debug.Log("Collided with "+other.gameObject.name+" with power up set to " + hasPowerUp);
-                enemyRb.AddForce(awayFromHuman*poweupStrength, ForceMode.Impulse);
-                HumanRb.isKinematic = false;
-                gameManager.hasPowerUp = false;
+                gameManager.GameOver();
             }
-            else
-            {
-                ObjectPoolManager.ReturnObjectToPool(other.gameObject, ObjectPoolManager.PoolType.Humans);
-                ObjectPoolManager.ReturnObjectToPool(gameObject);
-                gameManager.numberOfHumansAlive--;
-                if(gameManager.numberOfHumansAlive == 0)
-                {
-                    gameManager.GameOver();
-                }
-
-            }
-            
         }
         else if(other.gameObject.CompareTag("Power Up")) 
         {

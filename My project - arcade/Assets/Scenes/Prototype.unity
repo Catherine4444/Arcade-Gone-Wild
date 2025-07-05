@@ -602,14 +602,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Human 1
       objectReference: {fileID: 0}
-    - target: {fileID: 243352640255129519, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2779964090756566702, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
-      propertyPath: m_Speed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2853287689315500835, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.87
@@ -620,7 +612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2853287689315500835, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.69
+      value: -4.97
       objectReference: {fileID: 0}
     - target: {fileID: 2853287689315500835, guid: 84a1b37d021924d09a2cfc74c9fe0474, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1422,7 +1414,7 @@ GameObject:
   - component: {fileID: 1226908438}
   m_Layer: 0
   m_Name: Game Manager
-  m_TagString: Untagged
+  m_TagString: Game Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

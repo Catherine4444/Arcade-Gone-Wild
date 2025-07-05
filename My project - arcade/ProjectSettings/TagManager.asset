@@ -7,6 +7,8 @@ TagManager:
   - Human
   - Enemy
   - Power Up
+  - Shield
+  - Game Manager
   layers:
   - Default
   - TransparentFX
