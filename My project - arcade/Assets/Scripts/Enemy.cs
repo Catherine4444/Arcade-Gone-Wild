@@ -6,13 +6,13 @@ public class Enemy : MonoBehaviour
     public float speed;
     private Rigidbody enemyRb;
     
-    private float poweupStrength = 3;
+    //private float poweupStrength = 3;
     GameManager gameManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        speed = 22;
+        speed = 0.2f;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         enemyRb = GetComponent<Rigidbody>();
         humans = GameObject.FindGameObjectsWithTag("Human");
@@ -20,12 +20,12 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         if(gameManager.gameNotOver)
         {
             Vector3 towardsHuman = (humans[0].transform.position - transform.position).normalized;
-            enemyRb.AddForce(towardsHuman * speed, ForceMode.Impulse);
+            enemyRb.AddForce(towardsHuman * speed, ForceMode.VelocityChange);
         }   
     }
 

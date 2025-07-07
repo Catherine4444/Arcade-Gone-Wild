@@ -6,6 +6,7 @@ public class Human : MonoBehaviour
     public static Vector3 spawnPos = new Vector3(0, 0.5f , 5.7f);
     Rigidbody humanRb;
     public float speed = 1;
+    Animator anim;
 
     GameManager gameManager;
 
@@ -27,6 +28,7 @@ public class Human : MonoBehaviour
         destPoint = new Vector3(0, 0.5f, 3);
         walkPointSet = true;
         //humanRb = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<Animator>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
@@ -64,12 +66,15 @@ public class Human : MonoBehaviour
         }
         if (walkPointSet)
         {
+            
             agent.SetDestination(destPoint);
         }
-        if(Vector3.Distance(transform.position, destPoint) < 1) 
+        if(Vector3.Distance(transform.position, destPoint) < 5) 
         {
             walkPointSet = false;
-            yield return new WaitForSeconds(Random.Range(0f, 10f));
+            anim.SetBool("isWalking", false);
+            yield return new WaitForSeconds(Random.Range(0f, 2f));
+            anim.SetBool("isWalking", true);
             
         }
     }

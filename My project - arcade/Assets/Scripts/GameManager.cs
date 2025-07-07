@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     // for spawning, but mostly powerups 
     private float xRange = 16.8f;
     private float zRange = 5.5f;
-    private float ySpawnPos = 0.5f;
+    private float ySpawnPos = 0f;
 
     // for spawning enemies 
     Vector3 center = new Vector3(0, 0, 0);
@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     public bool gameNotOver;
 
     int wave = 0;
+    private ProgressBar progressBar;
+    int totalWaves;
     internal double enemiesActive = 0;
     [SerializeField] private int[,] itemsToSpawn = new int[,]
     {
@@ -57,9 +59,11 @@ public class GameManager : MonoBehaviour
         halfWidth = size.x / 2f;
         halfHeight = size.z / 2f;
 
-        int index = UnityEngine.Random.Range(0, powerups.Count);
-        ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
+        progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
+        //int index = UnityEngine.Random.Range(0, powerups.Count);
+        //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
         
+        totalWaves = itemsToSpawn.GetLength(0);
         SpawnHuman(numberOfHumansAlive);
 
         StartCoroutine(SpawnItems());
@@ -86,11 +90,12 @@ public class GameManager : MonoBehaviour
         double enemiesToSpawn;
         //double powerupsToSpawn;
         yield return new WaitForSeconds(5);
-        int totalWaves = itemsToSpawn.GetLength(0);
-        Debug.Log($"number of waves {totalWaves}");
+        
+        Debug.Log($"progress update {totalWaves} and {(wave+1)/(float)totalWaves}");
+        progressBar.IncrementProgress((1)/(float)totalWaves);
         while (gameNotOver && (wave < totalWaves))
         {
-            Debug.Log($"start of wave {wave}");
+            //Debug.Log($"start of wave {wave}");
             SpawnPowerUp(itemsToSpawn[wave, 1]);
             yield return new WaitForSeconds(powerUpSpawnRate);
 
@@ -100,7 +105,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("last wave");
+                //Debug.Log("last wave");
                 enemiesToSpawn = itemsToSpawn[wave, 0];
             }
 

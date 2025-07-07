@@ -40,13 +40,18 @@ public class PowerUp : MonoBehaviour
 
     private void OnMouseDown() 
     {
-        //Destroy(gameObject);
-        gameObject.GetComponent<Renderer>().enabled = false; // instant "disappear"
-        ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Powerups);
-        gameObject.GetComponent<Renderer>().enabled = true;
-        gameManager.Print("got powerup");
+        if(gameManager.gameNotOver)
+        {
+            //Destroy(gameObject);
+            gameObject.GetComponent<Renderer>().enabled = false; // instant "disappear"
+            ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Powerups);
+            gameObject.GetComponent<Renderer>().enabled = true;
+            gameManager.Print("got powerup");
+            
+            gameManager.PowerUpAquired();
+
+        }
         
-        gameManager.PowerUpAquired();
     }
 }
 
