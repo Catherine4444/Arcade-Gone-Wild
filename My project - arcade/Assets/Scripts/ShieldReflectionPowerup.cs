@@ -8,7 +8,7 @@ public class ShieldReflectionPowerup : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        reflectForce = 50f;
+        reflectForce = 10f;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 

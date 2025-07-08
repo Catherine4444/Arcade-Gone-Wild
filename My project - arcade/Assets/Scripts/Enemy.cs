@@ -5,18 +5,31 @@ public class Enemy : MonoBehaviour
     private GameObject[] humans;
     public float speed;
     private Rigidbody enemyRb;
+    private UnityEngine.AI.NavMeshAgent agent;
+    private int index;
+    private GameObject target;
     
     //private float poweupStrength = 3;
     GameManager gameManager;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         speed = 0.2f;
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         enemyRb = GetComponent<Rigidbody>();
         humans = GameObject.FindGameObjectsWithTag("Human");
+        index = Random.Range(0, humans.Length);
+        target = humans[index];
         
+    }
+
+    void Chase()
+    {
+        
+        agent.SetDestination(target.transform.position);
     }
 
     // Update is called once per frame
@@ -24,10 +37,14 @@ public class Enemy : MonoBehaviour
     {
         if(gameManager.gameNotOver)
         {
-            Vector3 towardsHuman = (humans[0].transform.position - transform.position).normalized;
-            enemyRb.AddForce(towardsHuman * speed, ForceMode.VelocityChange);
+            // Vector3 towardsHuman = (humans[0].transform.position - transform.position).normalized;
+            // enemyRb.AddForce(towardsHuman * speed, ForceMode.VelocityChange);
+            transform.LookAt(target.transform);
+            Chase();
         }   
     }
+
+
 
 
     private void OnMouseDown() 

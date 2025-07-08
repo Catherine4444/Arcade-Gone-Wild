@@ -47,11 +47,14 @@ public class GameManager : MonoBehaviour
     }; //row is wave number, column 1 is at most enemy, column 2 is power up, column 3 is humans
     // fifth wave is set numbers of enemies , before 
     
-
+    // UI stuff
+    // game over lose page 
+    public GameDoneScreen gameDoneScreen;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         hasPowerUp = false;
         gameNotOver = true;
         //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
@@ -92,9 +95,10 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(5);
         
         Debug.Log($"progress update {totalWaves} and {(wave+1)/(float)totalWaves}");
-        progressBar.IncrementProgress((1)/(float)totalWaves);
+        
         while (gameNotOver && (wave < totalWaves))
         {
+            progressBar.IncrementProgress((1)/(float)totalWaves);
             //Debug.Log($"start of wave {wave}");
             SpawnPowerUp(itemsToSpawn[wave, 1]);
             yield return new WaitForSeconds(powerUpSpawnRate);
@@ -117,7 +121,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(enemySpawnRate);
             wave++;
         }
-        GameOver();
+        GameOver(true);
 
     }
 
@@ -179,9 +183,18 @@ public class GameManager : MonoBehaviour
         return new Vector3(UnityEngine.Random.Range(-xRange,xRange), ySpawnPos, UnityEngine.Random.Range(-zRange,zRange));
     }
 
-    public void GameOver()
+    public void GameOver(bool isWin = false)
     {
         gameNotOver = false;
+        if (isWin)
+        {
+            gameDoneScreen.SetUp(GameDoneScreen.ScreenType.GamePass);
+        }
+        else
+        {
+            gameDoneScreen.SetUp();
+        }
+        gameDoneScreen.SetUp();
         Debug.Log("Game Over");
     }
 
@@ -203,4 +216,6 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log(s);
     }
+
+
 }

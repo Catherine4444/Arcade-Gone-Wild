@@ -1,0 +1,68 @@
+using UnityEngine;
+using System.Collections;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class GameDoneScreen : MonoBehaviour
+{
+    [SerializeField] private Button exitButton;
+    [SerializeField] private Button restartButton;
+    [SerializeField] private Button nextLevelButton;
+    [SerializeField] private TextMeshProUGUI winText;
+    [SerializeField] private TextMeshProUGUI loseText;
+    
+    public enum ScreenType 
+    {
+        GameOver,
+        GamePass
+    }
+
+    void Start() 
+    {
+        //gameObject.SetActive(false);
+        SetUp();
+        // exitButton = transform.Find("Exit Button").GetComponent<>;
+        // restartButton = transform.Find("Restart Button");
+        // nextLevelButton = transform.Find("Next Level Button");
+        
+    }
+
+    public void SetUp(ScreenType screen = ScreenType.GameOver)
+    {
+        gameObject.SetActive(true);
+        exitButton.gameObject.SetActive(true);
+
+        if (screen == ScreenType.GameOver)
+        {
+            restartButton.gameObject.SetActive(true);
+            loseText.gameObject.SetActive(true);
+            nextLevelButton.gameObject.SetActive(false);
+            winText.gameObject.SetActive(false);
+        }
+        else
+        {
+            nextLevelButton.gameObject.SetActive(true);
+            winText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(false);
+            loseText.gameObject.SetActive(false);
+        }
+    }
+
+    public void ExitButton()
+    {
+        
+    }
+
+    public void RestartButton()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void NextLevelButton()
+    {
+        Debug.Log("Next level button clicked");
+    }
+
+    
+}

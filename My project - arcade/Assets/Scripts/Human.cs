@@ -43,7 +43,7 @@ public class Human : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(Patrol());
+        Patrol();
     }
 
     private void OnMouseDown() 
@@ -54,29 +54,37 @@ public class Human : MonoBehaviour
 
     }
 
-    IEnumerator Patrol()
+    void Patrol()
     {
-        
+        // if (IsAgentStopped(agent))
+        // {
+        //     anim.SetBool("isWalking", true);
+        // }
+        // else
+        // {
+        //     anim.SetBool("isWalking", false);
+        // }
+
+
         if (!walkPointSet)
         {
-            // agent.isStopped = true;                // Stop movement
-            // yield return new WaitForSeconds(Random.Range(0f, 10f));
-            // agent.isStopped = false;               // Resume movement
             SearchForDest();
         }
         if (walkPointSet)
         {
-            
             agent.SetDestination(destPoint);
         }
         if(Vector3.Distance(transform.position, destPoint) < 5) 
         {
-            walkPointSet = false;
-            anim.SetBool("isWalking", false);
-            yield return new WaitForSeconds(Random.Range(0f, 2f));
-            anim.SetBool("isWalking", true);
-            
+            walkPointSet = false;      
         }
+    }
+
+    bool IsAgentStopped(UnityEngine.AI.NavMeshAgent agent)
+    {
+        return !agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
     }
 
     void SearchForDest()
