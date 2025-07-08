@@ -51,7 +51,7 @@ public class GameDoneScreen : MonoBehaviour
 
     public void ExitButton()
     {
-        
+        SceneManager.LoadScene("Start Page"); // load start scene 
     }
 
     public void RestartButton()

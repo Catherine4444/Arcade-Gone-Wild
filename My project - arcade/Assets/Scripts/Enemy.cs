@@ -8,6 +8,9 @@ public class Enemy : MonoBehaviour
     private UnityEngine.AI.NavMeshAgent agent;
     private int index;
     private GameObject target;
+    private AudioSource enemyAudio;
+
+    
     
     //private float poweupStrength = 3;
     GameManager gameManager;
@@ -18,6 +21,7 @@ public class Enemy : MonoBehaviour
     {
         speed = 0.2f;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        enemyAudio = GetComponent<AudioSource>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         enemyRb = GetComponent<Rigidbody>();
         humans = GameObject.FindGameObjectsWithTag("Human");
@@ -29,7 +33,7 @@ public class Enemy : MonoBehaviour
     void Chase()
     {
         
-        agent.SetDestination(target.transform.position);
+        agent.SetDestination(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
     }
 
     // Update is called once per frame
@@ -39,13 +43,15 @@ public class Enemy : MonoBehaviour
         {
             // Vector3 towardsHuman = (humans[0].transform.position - transform.position).normalized;
             // enemyRb.AddForce(towardsHuman * speed, ForceMode.VelocityChange);
-            transform.LookAt(target.transform);
+            Vector3 targetPos = new Vector3((-target.transform.position.z) , transform.position.y , target.transform.position.x);
+            transform.LookAt(targetPos);
             Chase();
+        }
+        else
+        {
+            enemyAudio.Stop();
         }   
     }
-
-
-
 
     private void OnMouseDown() 
     {

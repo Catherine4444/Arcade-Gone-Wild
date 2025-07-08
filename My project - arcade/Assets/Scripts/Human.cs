@@ -12,6 +12,7 @@ public class Human : MonoBehaviour
 
     //GameObject enemy;
     UnityEngine.AI.NavMeshAgent agent;
+     
 
 
     // random walk aka patrol coz easier to follow video 
@@ -43,7 +44,7 @@ public class Human : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Patrol();
+        StartCoroutine(Patrol());
     }
 
     private void OnMouseDown() 
@@ -54,7 +55,7 @@ public class Human : MonoBehaviour
 
     }
 
-    void Patrol()
+    IEnumerator Patrol()
     {
         // if (IsAgentStopped(agent))
         // {
@@ -65,7 +66,7 @@ public class Human : MonoBehaviour
         //     anim.SetBool("isWalking", false);
         // }
 
-
+        anim.SetFloat("speed", agent.velocity.magnitude);
         if (!walkPointSet)
         {
             SearchForDest();
@@ -74,9 +75,10 @@ public class Human : MonoBehaviour
         {
             agent.SetDestination(destPoint);
         }
-        if(Vector3.Distance(transform.position, destPoint) < 5) 
+        if(Vector3.Distance(transform.position, destPoint) < 15) 
         {
-            walkPointSet = false;      
+            walkPointSet = false;  
+            yield return new WaitForSeconds(Random.Range(0,2));    
         }
     }
 

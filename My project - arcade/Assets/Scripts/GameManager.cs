@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> humans;
     public int numberOfHumansAlive = 1; // initial amount to be count down
+    //private ShieldReflectionPowerup[] shields;
 
     [SerializeField] private List<GameObject> powerups;
     public bool hasPowerUp;
@@ -50,6 +51,13 @@ public class GameManager : MonoBehaviour
     // UI stuff
     // game over lose page 
     public GameDoneScreen gameDoneScreen;
+
+    //Audio
+    public AudioClip evilLaughOneSound; // for game over 
+    public AudioClip winSound; // for game pass
+
+    private AudioSource gameAudio;
+    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -62,6 +70,20 @@ public class GameManager : MonoBehaviour
         halfWidth = size.x / 2f;
         halfHeight = size.z / 2f;
 
+        gameAudio = GetComponent<AudioSource>();
+        //GameObject[] shieldsObj = GameObject.FindGameObjectsWithTag("Human");
+        // Debug.Log($"shield count {shieldsObj.Length}");
+        // shields = new ShieldReflectionPowerup[shieldsObj.Length];
+        // for (int i = 0; i < shieldsObj.Length; i++)
+        // {
+        //     Debug.Log("in loop");
+        //     ShieldReflectionPowerup script = shieldsObj[i].GetComponent<ShieldReflectionPowerup>();
+        //     if (script != null)
+        //     {
+        //         Debug.Log("Script found");
+        //         shields[i] = script;
+        //     }
+        // }
         progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
         //int index = UnityEngine.Random.Range(0, powerups.Count);
         //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
@@ -150,8 +172,8 @@ public class GameManager : MonoBehaviour
     Vector3 RandomEnemySpawnPosition()
     {
 
-        // Choose a side: 0 = left, 1 = right, 2 = top, 3 = bottom
-        int side = UnityEngine.Random.Range(0, 4);
+        // Choose a side: 0 = left, 1 = right, 2 = bottom
+        int side = UnityEngine.Random.Range(0, 3);
         Vector3 spawnPos = new Vector3(0, ySpawnPos, 0);
 
         switch (side)
@@ -165,14 +187,15 @@ public class GameManager : MonoBehaviour
                 spawnPos.z = UnityEngine.Random.Range(center.z - halfHeight, center.z + halfHeight);
                 break;
             // want the top to be decorative 
-            case 2: // Top
-                spawnPos.z = center.z + halfHeight + UnityEngine.Random.Range(closest, furthest);
-                spawnPos.x = UnityEngine.Random.Range(center.x - halfWidth, center.x + halfWidth);
-                break;
-            case 3: // Bottom
+            // case 2: // Top
+            //     spawnPos.z = center.z + halfHeight + UnityEngine.Random.Range(closest, furthest);
+            //     spawnPos.x = UnityEngine.Random.Range(center.x - halfWidth, center.x + halfWidth);
+            //     break;
+            case 2: // Bottom
                 spawnPos.z = center.z - halfHeight - UnityEngine.Random.Range(closest, furthest);
                 spawnPos.x = UnityEngine.Random.Range(center.x - halfWidth, center.x + halfWidth);
                 break;
+
         }
 
         return spawnPos;
@@ -192,6 +215,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            gameAudio.PlayOneShot(evilLaughOneSound, 1f);
             gameDoneScreen.SetUp();
         }
         gameDoneScreen.SetUp();
@@ -201,7 +225,13 @@ public class GameManager : MonoBehaviour
     public void PowerUpAquired()
     {
         hasPowerUp = true;
-        Debug.Log("powerup");
+        // foreach(ShieldReflectionPowerup shield in shields) 
+        // {
+        //     Debug.Log("shield particle activated");
+        //     shield.ActivateShield();
+            
+        // }
+        // Debug.Log("powerup");
         StartCoroutine(PowerupCountdown());
     }
 
@@ -209,6 +239,11 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(10);
         hasPowerUp = false;
+        // foreach(ShieldReflectionPowerup shield in shields) 
+        // {
+        //     shield.DeactivateShield();
+            
+        // }
 
     }
 
@@ -216,6 +251,4 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log(s);
     }
-
-
 }

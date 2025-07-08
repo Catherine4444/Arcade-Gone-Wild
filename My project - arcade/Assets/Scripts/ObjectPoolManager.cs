@@ -211,9 +211,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // public static int CountActive(GameObject objectToCount)
-    // {
-    //     return _objectPools[objectToCount].CountActive;
-    // }
+    // My code
+    
 
 }
