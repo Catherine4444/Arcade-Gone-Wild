@@ -100,7 +100,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526687232855252760}
   serializedVersion: 5
-  m_Mass: 150
+  m_Mass: 75
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -114,7 +114,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 84
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35392b6a0945421ab7acb142633125f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
+  StillThreshold: 0.05
 --- !u!65 &2969980093333628523
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -139,7 +139,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526687232855252760}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: c5b8792a6e9ab4f8698b27cc98c69ca1, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

@@ -21,31 +21,33 @@ public class GameDoneScreen : MonoBehaviour
     void Start() 
     {
         //gameObject.SetActive(false);
-        SetUp();
         // exitButton = transform.Find("Exit Button").GetComponent<>;
         // restartButton = transform.Find("Restart Button");
         // nextLevelButton = transform.Find("Next Level Button");
         
     }
 
-    public void SetUp(ScreenType screen = ScreenType.GameOver)
+    public void SetUp(ScreenType screen)
     {
         gameObject.SetActive(true);
         exitButton.gameObject.SetActive(true);
 
-        if (screen == ScreenType.GameOver)
+        switch (screen)
         {
-            restartButton.gameObject.SetActive(true);
-            loseText.gameObject.SetActive(true);
-            nextLevelButton.gameObject.SetActive(false);
-            winText.gameObject.SetActive(false);
-        }
-        else
-        {
-            nextLevelButton.gameObject.SetActive(true);
-            winText.gameObject.SetActive(true);
-            restartButton.gameObject.SetActive(false);
-            loseText.gameObject.SetActive(false);
+            case ScreenType.GameOver:
+        
+                restartButton.gameObject.SetActive(true);
+                loseText.gameObject.SetActive(true);
+                nextLevelButton.gameObject.SetActive(false);
+                winText.gameObject.SetActive(false);
+                break;
+        
+            case ScreenType.GamePass:
+                nextLevelButton.gameObject.SetActive(true);
+                winText.gameObject.SetActive(true);
+                restartButton.gameObject.SetActive(false);
+                loseText.gameObject.SetActive(false);
+                break;
         }
     }
 

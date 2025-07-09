@@ -91,7 +91,10 @@ public class GameManager : MonoBehaviour
         totalWaves = itemsToSpawn.GetLength(0);
         SpawnHuman(numberOfHumansAlive);
 
+        //GameOver(true);
+
         StartCoroutine(SpawnItems());
+        
     }
 
     // Update is called once per frame
@@ -211,27 +214,21 @@ public class GameManager : MonoBehaviour
         gameNotOver = false;
         if (isWin)
         {
+            gameAudio.PlayOneShot(winSound, 1f);
             gameDoneScreen.SetUp(GameDoneScreen.ScreenType.GamePass);
         }
         else
         {
             gameAudio.PlayOneShot(evilLaughOneSound, 1f);
-            gameDoneScreen.SetUp();
+            gameDoneScreen.SetUp(GameDoneScreen.ScreenType.GameOver);
         }
-        gameDoneScreen.SetUp();
+        //gameDoneScreen.SetUp();
         Debug.Log("Game Over");
     }
 
     public void PowerUpAquired()
     {
         hasPowerUp = true;
-        // foreach(ShieldReflectionPowerup shield in shields) 
-        // {
-        //     Debug.Log("shield particle activated");
-        //     shield.ActivateShield();
-            
-        // }
-        // Debug.Log("powerup");
         StartCoroutine(PowerupCountdown());
     }
 
@@ -239,12 +236,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(10);
         hasPowerUp = false;
-        // foreach(ShieldReflectionPowerup shield in shields) 
-        // {
-        //     shield.DeactivateShield();
-            
-        // }
-
     }
 
     public void Print(String s)

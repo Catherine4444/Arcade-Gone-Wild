@@ -1,14 +1,19 @@
 using UnityEngine;
+using System.Collections;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IKnockbackable
 {
     private GameObject[] humans;
-    public float speed;
+    
+    //public float speed;
     private Rigidbody enemyRb;
     private UnityEngine.AI.NavMeshAgent agent;
     private int index;
     private GameObject target;
     private AudioSource enemyAudio;
+
+    private Coroutine MoveCoroutine;
+    [Range(0.001f, 0.1f)] [SerializeField] private float StillThreshold = 0.1f;
 
     
     
@@ -16,10 +21,8 @@ public class Enemy : MonoBehaviour
     GameManager gameManager;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void OnEnable() 
     {
-        speed = 0.2f;
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         enemyAudio = GetComponent<AudioSource>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
@@ -27,31 +30,72 @@ public class Enemy : MonoBehaviour
         humans = GameObject.FindGameObjectsWithTag("Human");
         index = Random.Range(0, humans.Length);
         target = humans[index];
-        
+        agent.enabled = true;
+        agent.Warp(transform.position);
+        MoveCoroutine = StartCoroutine(Chase());
     }
 
-    void Chase()
-    {
-        
-        agent.SetDestination(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
-    }
-
-    // Update is called once per frame
+        // Update is called once per frame
     void LateUpdate()
     {
-        if(gameManager.gameNotOver)
-        {
-            // Vector3 towardsHuman = (humans[0].transform.position - transform.position).normalized;
-            // enemyRb.AddForce(towardsHuman * speed, ForceMode.VelocityChange);
-            Vector3 targetPos = new Vector3((-target.transform.position.z) , transform.position.y , target.transform.position.x);
-            transform.LookAt(targetPos);
-            Chase();
-        }
-        else
-        {
-            enemyAudio.Stop();
-        }   
+
     }
+
+    IEnumerator Chase()
+    {
+        //Debug.Log($"Chase coroutine started for {gameObject.name}");
+        while (gameManager.gameNotOver)
+        {
+            if (agent.enabled == true) // didn't want to do this implicitly 
+            {
+                
+                //Vector3 targetPos = new Vector3((-target.transform.position.z) , transform.position.y , target.transform.position.x);
+                
+                //transform.LookAt(targetPos);
+                agent.SetDestination(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
+                //Debug.Log($"Setting derstination ");
+            }
+            yield return new WaitForSeconds(0.125f);
+        }
+
+        enemyAudio.Stop();
+    }
+
+    public void GetKnockedBack(Vector3 force)
+    {
+        StopCoroutine(MoveCoroutine);
+        MoveCoroutine = StartCoroutine(ApplyKnockBack(force));
+
+    }
+
+    IEnumerator ApplyKnockBack(Vector3 force)
+    {
+
+        yield return null; // wait 1 frame avoid carry over from other coroutines 
+        agent.enabled = false;
+        enemyRb.useGravity = true;
+        enemyRb.isKinematic = false;
+        enemyRb.AddForce(force);
+
+        yield return new WaitForFixedUpdate(); //sometimes ai won't get knocked back bcs force hasn't apply to rb
+        //yield return new WaitUntil(() => enemyRb.linearVelocity.magnitude < StillThreshold);
+        yield return new WaitForSeconds(2f); // stunned for a sec
+
+        //undo the rigid body stuff
+        enemyRb.linearVelocity = Vector3.zero;
+        enemyRb.angularVelocity = Vector3.zero;
+        enemyRb.useGravity = false;
+        enemyRb.isKinematic = true;
+        agent.enabled = true;
+        agent.Warp(transform.position);
+
+        yield return null; // wait a frame 
+
+        MoveCoroutine = StartCoroutine(Chase());
+
+    }
+
+
 
     private void OnMouseDown() 
     {
