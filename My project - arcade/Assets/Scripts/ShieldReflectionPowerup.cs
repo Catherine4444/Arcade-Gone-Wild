@@ -57,9 +57,16 @@ public class ShieldReflectionPowerup : MonoBehaviour
             {
                 shieldAudio.PlayOneShot(crashSounds, 1f);
                 //Debug.Log("Collided with "+other.gameObject.name+" with power up set to " + gameManager.hasPowerUp);
-                Vector3 awayFromShield = (other.gameObject.transform.position - transform.position).normalized;
-                awayFromShield = new Vector3(awayFromShield.x * reflectForce, 0f, awayFromShield.z * reflectForce);
-                enemyRb.AddForce(awayFromShield, ForceMode.VelocityChange);
+
+                //get knockback strength 
+                Vector3 force = (other.gameObject.transform.position - transform.position).normalized;
+                force = new Vector3(awayFromShield.x * reflectForce, 0f, awayFromShield.z * reflectForce);
+                //
+                //knockbackable.GetKnockedBack(force);
+
+                enemyRb.AddForce(force, ForceMode.VelocityChange);
+                
+
             }
 
             gameManager.hasPowerUp = false;
@@ -68,4 +75,6 @@ public class ShieldReflectionPowerup : MonoBehaviour
         }
         
     }
+
+    //private void HandleEnemyImpct
 }
