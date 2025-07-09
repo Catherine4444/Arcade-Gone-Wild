@@ -7,6 +7,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    FadeInOut fade;
     [SerializeField] private List<GameObject> enemies;
     private float enemySpawnRate = 2;
 
@@ -62,28 +63,23 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        fade = GameObject.Find("Image").GetComponent<FadeInOut>();
+        if(fade != null)
+        {
+            fade.FadeOut();
+        }
+        else
+        {
+            Debug.Log("Fading failed, object null");
+        }
         
         hasPowerUp = false;
         gameNotOver = true;
-        //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
 
         halfWidth = size.x / 2f;
         halfHeight = size.z / 2f;
 
         gameAudio = GetComponent<AudioSource>();
-        //GameObject[] shieldsObj = GameObject.FindGameObjectsWithTag("Human");
-        // Debug.Log($"shield count {shieldsObj.Length}");
-        // shields = new ShieldReflectionPowerup[shieldsObj.Length];
-        // for (int i = 0; i < shieldsObj.Length; i++)
-        // {
-        //     Debug.Log("in loop");
-        //     ShieldReflectionPowerup script = shieldsObj[i].GetComponent<ShieldReflectionPowerup>();
-        //     if (script != null)
-        //     {
-        //         Debug.Log("Script found");
-        //         shields[i] = script;
-        //     }
-        // }
         progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
         //int index = UnityEngine.Random.Range(0, powerups.Count);
         //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
@@ -91,10 +87,7 @@ public class GameManager : MonoBehaviour
         totalWaves = itemsToSpawn.GetLength(0);
         SpawnHuman(numberOfHumansAlive);
 
-        //GameOver(true);
-
         StartCoroutine(SpawnItems());
-        
     }
 
     // Update is called once per frame
