@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameDoneScreen : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup canvasgroup;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button nextLevelButton;
@@ -20,16 +21,20 @@ public class GameDoneScreen : MonoBehaviour
 
     void Start() 
     {
-        //gameObject.SetActive(false);
-        // exitButton = transform.Find("Exit Button").GetComponent<>;
-        // restartButton = transform.Find("Restart Button");
-        // nextLevelButton = transform.Find("Next Level Button");
-        
+        //canvasgroup = GetComponent<CanvasGroup>();
+        canvasgroup.alpha = 0;
+        nextLevelButton.gameObject.SetActive(false);
+        winText.gameObject.SetActive(false);
+        exitButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+        loseText.gameObject.SetActive(false);
+
     }
 
     public void SetUp(ScreenType screen)
     {
-        gameObject.SetActive(true);
+        canvasgroup.alpha = 1;
+        //gameObject.SetActive(true);
         exitButton.gameObject.SetActive(true);
 
         switch (screen)
@@ -43,7 +48,7 @@ public class GameDoneScreen : MonoBehaviour
                 break;
         
             case ScreenType.GamePass:
-                nextLevelButton.gameObject.SetActive(true);
+                nextLevelButton.gameObject.SetActive(false);
                 winText.gameObject.SetActive(true);
                 restartButton.gameObject.SetActive(false);
                 loseText.gameObject.SetActive(false);

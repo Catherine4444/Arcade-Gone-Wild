@@ -5,21 +5,29 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    private GameManager gameManager;
 
+    void Start()
+    {
+        gameManager = GetComponent<GameManager>();
+    }
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (gameManager.gameNotOver)
         {
-            if(GameIsPaused)
+            if(Input.GetKeyDown(KeyCode.Escape))
             {
-                Resume();
+                if(GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
-            else
-            {
-                Pause();
-            }
-            
+
         }
         
     }

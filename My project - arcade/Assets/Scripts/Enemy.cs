@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour, IKnockbackable
     private Rigidbody enemyRb;
     private UnityEngine.AI.NavMeshAgent agent;
     private int index;
+    private static float enemySpeed = 1.5f;
     private GameObject target;
     private AudioSource enemyAudio;
 
@@ -20,13 +21,17 @@ public class Enemy : MonoBehaviour, IKnockbackable
     //private float poweupStrength = 3;
     GameManager gameManager;
 
-
-    void OnEnable() 
+    void Awake()
     {
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         enemyAudio = GetComponent<AudioSource>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         enemyRb = GetComponent<Rigidbody>();
+    }
+
+    void OnEnable() 
+    {
+        agent.speed = Enemy.enemySpeed;
         humans = GameObject.FindGameObjectsWithTag("Human");
         index = Random.Range(0, humans.Length);
         target = humans[index];
@@ -35,11 +40,11 @@ public class Enemy : MonoBehaviour, IKnockbackable
         MoveCoroutine = StartCoroutine(Chase());
     }
 
-        // Update is called once per frame
-    void LateUpdate()
+    public static void SetEnemySpeed(float s)
     {
-
+        enemySpeed = s;
     }
+
 
     IEnumerator Chase()
     {
@@ -48,12 +53,7 @@ public class Enemy : MonoBehaviour, IKnockbackable
         {
             if (agent.enabled == true) // didn't want to do this implicitly 
             {
-                
-                //Vector3 targetPos = new Vector3((-target.transform.position.z) , transform.position.y , target.transform.position.x);
-                
-                //transform.LookAt(targetPos);
                 agent.SetDestination(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
-                //Debug.Log($"Setting derstination ");
             }
             yield return new WaitForSeconds(0.125f);
         }

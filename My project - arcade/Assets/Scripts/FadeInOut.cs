@@ -32,7 +32,7 @@ public class FadeInOut : MonoBehaviour
         }
         if (fadeout==true)
         {
-            Debug.Log("Fade Out Called");
+            //Debug.Log("Fade Out Called");
             if(canvasgroup.alpha >= 0)
             {
                 canvasgroup.alpha -= timeToFade * Time.deltaTime;

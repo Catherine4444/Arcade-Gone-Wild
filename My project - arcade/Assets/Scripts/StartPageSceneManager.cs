@@ -21,6 +21,7 @@ public class StartPageSceneManager : MonoBehaviour
 
     public void PlayButton()
     {
+        animDoor.SetBool("isOpening", false);
         playButton.gameObject.SetActive(false);
         animDoor.SetBool("isOpening", true);
         StartCoroutine(WaitForAnim());
@@ -28,6 +29,7 @@ public class StartPageSceneManager : MonoBehaviour
 
     IEnumerator WaitForAnim()
     {
+        Debug.Log("Enter Into anim");
         yield return new WaitForSeconds(1);
         fade.FadeIn();
         yield return new WaitForSeconds(1);

@@ -12,14 +12,11 @@ public class Human : MonoBehaviour
 
     //GameObject enemy;
     UnityEngine.AI.NavMeshAgent agent;
-     
-
 
     // random walk aka patrol coz easier to follow video 
     Vector3 destPoint;
     bool walkPointSet; // if there is already a destination point 
     [SerializeField] float range; // how far allowed to walk 
-
 
     [SerializeField] LayerMask groundLayer, playerLayer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -28,7 +25,7 @@ public class Human : MonoBehaviour
         transform.position = spawnPos;
         destPoint = new Vector3(0, 0.5f, 3);
         walkPointSet = true;
-        //humanRb = GetComponent<Rigidbody>();
+
         anim = GetComponentInChildren<Animator>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         
@@ -36,9 +33,6 @@ public class Human : MonoBehaviour
         agent.speed = 1.5f;
         agent.SetDestination(destPoint);
 
-        
-        //GetComponentInParent<GameManager>();
-        //transform.Translate(Vector3.back * speed * Time.deltaTime);
     }
 
     // Update is called once per frame
@@ -49,22 +43,16 @@ public class Human : MonoBehaviour
 
     private void OnMouseDown() 
     {
-        gameManager.GameOver();
-        //Destroy(gameObject);
-        ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Humans);
-
+        if(gameManager.gameNotOver && gameManager.gameStart)
+        {
+            gameManager.GameOver(false);
+            ObjectPoolManager.ReturnObjectToPool(gameObject, ObjectPoolManager.PoolType.Humans);
+        }
+        
     }
 
     IEnumerator Patrol()
     {
-        // if (IsAgentStopped(agent))
-        // {
-        //     anim.SetBool("isWalking", true);
-        // }
-        // else
-        // {
-        //     anim.SetBool("isWalking", false);
-        // }
 
         anim.SetFloat("speed", agent.velocity.magnitude);
         if (!walkPointSet)
@@ -82,13 +70,6 @@ public class Human : MonoBehaviour
         }
     }
 
-    bool IsAgentStopped(UnityEngine.AI.NavMeshAgent agent)
-    {
-        return !agent.pathPending &&
-            agent.remainingDistance <= agent.stoppingDistance &&
-            (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
-    }
-
     void SearchForDest()
     {
         float z = Random.Range(-range,range);
@@ -102,5 +83,11 @@ public class Human : MonoBehaviour
             walkPointSet = true;
         }
     }
-
+    
+    // bool IsAgentStopped(UnityEngine.AI.NavMeshAgent agent)
+    // {
+    //     return !agent.pathPending &&
+    //         agent.remainingDistance <= agent.stoppingDistance &&
+    //         (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
+    // }
 }

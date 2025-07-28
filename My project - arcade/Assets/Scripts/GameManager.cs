@@ -8,18 +8,17 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     FadeInOut fade;
+    GameMechanicsInstruction gameMechanicInstruction;
     [SerializeField] private List<GameObject> enemies;
-    private float enemySpawnRate = 2;
+    private float enemySpawnRate = 1;
+    private float enemySpeed = 2.2f;
 
     [SerializeField] private List<GameObject> humans;
     public int numberOfHumansAlive = 1; // initial amount to be count down
-    //private ShieldReflectionPowerup[] shields;
 
     [SerializeField] private List<GameObject> powerups;
     public bool hasPowerUp;
-    private float powerUpSpawnRate = 2;
-
-    //[SerializeField] private timer;
+    private float powerUpSpawnRate = 2.5f;
 
     // for spawning, but mostly powerups 
     private float xRange = 16.8f;
@@ -35,6 +34,7 @@ public class GameManager : MonoBehaviour
     float halfHeight;
 
     public bool gameNotOver;
+    public bool gameStart;
 
     int wave = 0;
     private ProgressBar progressBar;
@@ -42,16 +42,16 @@ public class GameManager : MonoBehaviour
     internal double enemiesActive = 0;
     [SerializeField] private int[,] itemsToSpawn = new int[,]
     {
-        {1, 0, 0},
-        {2, 1, 0},
-        {2, 0, 0},
-        {3, 1, 0}
-    }; //row is wave number, column 1 is at most enemy, column 2 is power up, column 3 is humans
+        {1, 0, 0, 1},
+        {2, 1, 0, 2},
+        {2, 0, 0, 3},
+        {3, 1, 0, 4}
+    }; //row is wave number, column 1 is at most enemy, column 2 is power up, column 3 is humans, column 4 is enemy speed ;
     // fifth wave is set numbers of enemies , before 
     
     // UI stuff
     // game over lose page 
-    public GameDoneScreen gameDoneScreen;
+    private GameDoneScreen gameDoneScreen;
 
     //Audio
     public AudioClip evilLaughOneSound; // for game over 
@@ -59,11 +59,12 @@ public class GameManager : MonoBehaviour
 
     private AudioSource gameAudio;
     
-    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gameMechanicInstruction = GetComponent<GameMechanicsInstruction>();
         fade = GameObject.Find("Image").GetComponent<FadeInOut>();
+        gameDoneScreen = GameObject.FindObjectOfType<GameDoneScreen>();
         if(fade != null)
         {
             fade.FadeOut();
@@ -75,6 +76,7 @@ public class GameManager : MonoBehaviour
         
         hasPowerUp = false;
         gameNotOver = true;
+        gameStart = false;
 
         halfWidth = size.x / 2f;
         halfHeight = size.z / 2f;
@@ -83,17 +85,18 @@ public class GameManager : MonoBehaviour
         progressBar = GameObject.Find("Progress Bar").GetComponent<ProgressBar>();
         //int index = UnityEngine.Random.Range(0, powerups.Count);
         //ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
-        
         totalWaves = itemsToSpawn.GetLength(0);
-        SpawnHuman(numberOfHumansAlive);
 
-        StartCoroutine(SpawnItems());
+        SpawnHuman(numberOfHumansAlive);
+        StartCoroutine(WaitUntilGameStart());
+        
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator WaitUntilGameStart()
     {
-        
+        yield return new WaitUntil(() => gameStart);
+        StartCoroutine(SpawnItems());
+
     }
 
     void SpawnHuman(int number = 1 )
@@ -101,7 +104,6 @@ public class GameManager : MonoBehaviour
         int index = UnityEngine.Random.Range(0, humans.Count);
         //Instantiate(enemies[index], RandomEnemySpawnPosition(), enemies[index].transform.rotation);
         ObjectPoolManager.SpawnObject(humans[index], Human.spawnPos, humans[index].transform.rotation, ObjectPoolManager.PoolType.Humans);
-
     }
 
     
@@ -109,20 +111,25 @@ public class GameManager : MonoBehaviour
     IEnumerator SpawnItems()
     {
         double enemiesToSpawn;
-        //double powerupsToSpawn;
-        yield return new WaitForSeconds(5);
+        int powerupsToSpawn;
+        yield return new WaitForSeconds(2);
         
-        Debug.Log($"progress update {totalWaves} and {(wave+1)/(float)totalWaves}");
+        //Debug.Log($"progress update {totalWaves} and {(wave+1)/(float)totalWaves}");
         
         while (gameNotOver && (wave < totalWaves))
-        {
-            progressBar.IncrementProgress((1)/(float)totalWaves);
+        {   
+            powerupsToSpawn = itemsToSpawn[wave, 1];
+            
             //Debug.Log($"start of wave {wave}");
-            SpawnPowerUp(itemsToSpawn[wave, 1]);
+            
+            SpawnPowerUp(powerupsToSpawn);
             yield return new WaitForSeconds(powerUpSpawnRate);
+
+            Enemy.SetEnemySpeed(itemsToSpawn[wave, 3]);
 
             if (wave < (totalWaves - 2))
             {
+                
                 enemiesToSpawn = UnityEngine.Random.Range(1, itemsToSpawn[wave, 0]+1);
             }
             else
@@ -130,26 +137,44 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("last wave");
                 enemiesToSpawn = itemsToSpawn[wave, 0];
             }
+            progressBar.IncrementProgress((1)/(float)totalWaves);
 
             enemiesActive = enemiesToSpawn;
             SpawnEnemies(enemiesToSpawn);
-            Debug.Log($"start of wave {wave}. Enemies to Spawn: {enemiesToSpawn}. enemies active: {enemiesActive}");
+            //Debug.Log($"start of wave {wave}. Enemies to Spawn: {enemiesToSpawn}. enemies active: {enemiesActive}");
             // Wait until all enemies are destroyed
             yield return new WaitUntil(() => enemiesActive == 0);
-            yield return new WaitForSeconds(enemySpawnRate);
-            wave++;
-        }
-        GameOver(true);
 
+            if(wave == 0 )
+            {
+                StartCoroutine(gameMechanicInstruction.SodaAlert());
+                yield return new WaitForSeconds(3);
+            }
+
+            yield return new WaitForSeconds(enemySpawnRate);
+
+            wave++;
+
+            if (wave == totalWaves)
+            {
+                GameOver(true);
+            }
+        }
     }
 
     void SpawnPowerUp(int powerupsToSpawn)
     {
-         for (int i = 0; i < powerupsToSpawn; i++)
+        if (powerupsToSpawn > 0)
+        {
+            
+            for (int i = 0; i < powerupsToSpawn; i++)
             {
                 int index = UnityEngine.Random.Range(0, powerups.Count);
                 ObjectPoolManager.SpawnObject(powerups[index], RandomPowerupSpawnPosition(), powerups[index].transform.rotation, ObjectPoolManager.PoolType.Powerups);
             }
+
+        }
+         
     }
 
     void SpawnEnemies(double enemiesToSpawn)
